@@ -1,5 +1,5 @@
 const {response, request}= require ('express');
-
+const User= require ('../models/User.model');
 
 const usersGet =(req =request, res = response ) => {
     // GET - http://localhost:3000/test
@@ -8,11 +8,24 @@ const usersGet =(req =request, res = response ) => {
     })
 
 };
-const usersPost = (req =request, res = response) => {
+const usersPost = async (req =request, res = response) => {
     // POST - http://localhost:3000/test
+ try {
+    const body = req.body;
+    const user= new User(body);
+    await user.save()
     res.status(200).json({
-        msg: 'POST API - controlador'
+        msg: 'POST API - controlador',
+        post: body,
+        user: user
     });
+    
+ } catch (error) {
+    res.status(400).json({
+        msg: 'se detecto un error',
+        detalle: error.message
+    })
+ }
 
 };
 const usersPut =(req =request, res = response) => {
