@@ -1,11 +1,22 @@
 const {response, request}= require ('express');
 const User= require ('../models/User.model');
 
-const usersGet =(req =request, res = response ) => {
+const usersGet = async (req =request, res = response ) => {
     // GET - http://localhost:3000/test
-    res.status(200).json({
-        msg: 'GET API - controlador'
-    })
+    try {
+        const users= await User.find();
+        res.status(200).json({
+            msg: 'GET API - controlador',
+            data: users
+        });
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Error al crear el usuario',
+            details: error.message
+        });
+        
+    }
+
 
 };
 const usersPost = async (req =request, res = response) => {
